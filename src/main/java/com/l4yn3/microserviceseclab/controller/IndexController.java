@@ -8,6 +8,8 @@ import com.l4yn3.microserviceseclab.logic.IndexLogic;
 import com.l4yn3.microserviceseclab.mapper.IStudentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import com.l4yn3.microserviceseclab.data.Test;
+import com.l4yn3.microserviceseclab.data.TestTaintStep;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,5 +108,25 @@ public class IndexController {
     @RequestMapping(value = "/jpaWithAnnotations")
     public List<Person> jpawithAnnotations(@RequestParam(value = "name") String name) {
         return personRepository.findPersonByNickname(name);
+    }
+    
+    @RequestMapping("/xss3")
+    public String XSS3(@RequestParam(value = "input") String input){
+        String newInput,safeInput;
+        Test test = new Test();
+        newInput = (String) test.test(input);
+        safeInput = xssEncode(newInput);
+        return  safeInput;
+    }
+    private static String xssEncode(String s){
+        if (s == null || s.isEmpty()) {
+            return s;
+        }
+        StringBuilder sb = new StringBuilder(s.length());
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c!='>' && c!='<') {sb.append(c);}
+        }
+        return sb.toString();
     }
 }
