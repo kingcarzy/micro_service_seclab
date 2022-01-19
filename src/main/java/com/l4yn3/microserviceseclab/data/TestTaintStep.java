@@ -1,4 +1,4 @@
-package com.jus4fun.xyz;
+package com.l4yn3.microserviceseclab.data;
 
 public class TestTaintStep {
     String name;
