@@ -26,6 +26,28 @@ public class IndexController {
     @Autowired
     PersonRepository personRepository;
 
+    @RequestMapping("/xss")
+    public String XSS(@RequestParam(value = "input") String input){
+        return  input;
+    }
+
+    @RequestMapping("/xss2")
+    public String XSS2(@RequestParam(value = "input") String input){
+        String newInput;
+        Test test = new Test();
+        newInput = (String) test.test(input);
+        return  input;
+    }
+    
+    @RequestMapping("/xss4")
+    public String XSS4(@RequestParam(value = "input") String input){
+        String newInput,safeInput;
+        TestTaintStep test = new TestTaintStep();
+        test.setName(input);
+        String outPut = test.getName();
+        return  outPut;
+    }
+    
     @RequestMapping(value = "/one")
     public List<Student> one(@RequestParam(value = "username") String username) {
         return indexLogic.getStudent(username);
